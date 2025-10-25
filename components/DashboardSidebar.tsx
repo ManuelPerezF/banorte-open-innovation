@@ -44,11 +44,7 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
       icon: LayoutDashboard,
       path: "/dashboard",
     },
-    {
-      title: "Predicción",
-      icon: TrendingUp,
-      path: "/predictions",
-    },
+  
     {
       title: "Datos",
       icon: Database,
@@ -69,7 +65,7 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
 
   return (
     <Sidebar>
-      {/* Header */}
+      {/* Header with Logo */}
       <SidebarHeader>
         <div className="flex items-center gap-3 p-4">
           <BanorteLogo size="md" />
@@ -80,7 +76,7 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
         </div>
       </SidebarHeader>
 
-      {/* Content */}
+      
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Navegación</SidebarGroupLabel>
@@ -102,7 +98,7 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Footer */}
+    
       <SidebarFooter>
         <SidebarMenu>
           {/* User Info */}
