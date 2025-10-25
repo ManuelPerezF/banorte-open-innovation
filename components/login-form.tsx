@@ -69,7 +69,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold text-white">Inicia Sesión en tu cuenta</h1>
           <p className="text-gray-300 text-sm text-balance">
-            Ingresa tu ID y Nombre para verificar tu cuenta
+            Ingresa tu número de cliente y contraseña para continuar
           </p>
         </div>
 

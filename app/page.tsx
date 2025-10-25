@@ -6,7 +6,7 @@ import { ChatBubbleIcon, BellIcon, FileTextIcon, BarChartIcon, ArrowUpIcon } fro
 import GradientBlinds from '@/components/landing/GradientBlinds';
 import { BentoGrid, BentoCard } from '@/components/landing/BentoGrid';
 
-// SVG for the mask, converted to a Base64 data URL
+
 const svgString = `
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M1099.45 0C454.884 0 -67.5559 169.699 -67.5559 380.126C-67.5559 556.613 296.569 703.686 791.87 746.677L995.418 119.921L1031.6 757.99C1054.22 757.99 1076.84 757.99 1101.72 757.99C1746.28 757.99 2268.72 588.29 2268.72 377.863C2266.46 171.961 1744.02 0 1099.45 0Z" fill="white"/>
@@ -16,7 +16,7 @@ const svgString = `
 `.trim();
 const svgDataUrl = `data:image/svg+xml;base64,${typeof window !== 'undefined' ? window.btoa(svgString) : ''}`;
 
-// SVG for the logo, converted to a Base64 data URL
+
 const logoSvgString = `
 <svg width="1920" height="236" viewBox="0 0 1920 236" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M594.24 130.56H596.48C608.96 130.56 618.88 120.64 618.88 108.16V88.6399C618.88 77.1199 617.6 71.68 613.12 65.6C606.72 57.6 595.52 54.08 584.64 54.08H488H448.96V82.88V116.16V130.56V144.96V180.16V211.84H488H572.8C586.88 211.84 603.52 209.92 612.16 200.64C620.16 192 620.48 185.28 620.48 164.16V157.12C620.8 142.72 608.96 130.56 594.24 130.56ZM488.32 82.88H570.24C574.4 82.88 583.04 84.48 583.04 91.2V108.48C583.04 113.92 575.04 116.16 571.84 116.16H488.32V82.88ZM583.68 171.84C583.68 176.64 579.84 180.48 575.04 180.48H488.32V145.28H574.4C579.52 145.28 583.68 149.44 583.68 154.56V171.84Z" fill="white"/>
@@ -32,10 +32,7 @@ const logoSvgString = `
 </svg>`.trim();
 const logoSvgDataUrl = `data:image/svg+xml;base64,${typeof window !== 'undefined' ? window.btoa(logoSvgString) : ''}`;
 
-/**
- * A custom hook to check if the screen width is above a certain breakpoint.
- * Defaults to true to prevent a flash of unmasked content on desktop.
- */
+
 const useIsDesktop = () => {
   const [isDesktop, setIsDesktop] = useState(true);
 
@@ -52,10 +49,7 @@ const useIsDesktop = () => {
   return isDesktop;
 };
 
-/**
- * A custom hook to check if the screen width is above the 'lg' breakpoint (1024px).
- * Defaults to true for server-side rendering and initial mobile-first hydration.
- */
+
 const useIsLargeScreen = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(true);
 
