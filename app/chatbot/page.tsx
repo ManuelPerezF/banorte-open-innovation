@@ -155,7 +155,7 @@ export default function ChatbotPage() {
                 <CardTitle className="flex items-center gap-2">
                   <Bot className="h-5 w-5 text-red-600" />
                   Asistente Financiero Banorte MCP
-                  <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">🤖 AI Avanzada</span>
+                
                 </CardTitle>
                 <p className="text-sm text-gray-600">
                   Pregúntame sobre tus finanzas con tecnología MCP. Obten análisis avanzados, predicciones y consejos personalizados
@@ -316,7 +316,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cómo está mi tendencia de crecimiento mes a mes?')}
                           disabled={isLoading}
                         >
-                          � Tendencias
+                          📉 Tendencias
                         </Button>
                       </>
                     ) : (
