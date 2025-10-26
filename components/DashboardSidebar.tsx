@@ -48,8 +48,7 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
     {
       title: "Datos",
       icon: Database,
-      path:
-        userType === "personal" ? "/dashboard/personal" : "/dashboard/company",
+      path: "/database",
     },
     {
       title: "Reporte",
