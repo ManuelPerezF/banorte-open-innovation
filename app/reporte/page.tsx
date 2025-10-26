@@ -274,12 +274,12 @@ export default function ReportePage() {
                           </CardContent>
                         </Card>
 
-                        {/* Flujo Libre */}
+                        {/* Gastos Mensuales */}
                         <Card>
                           <CardContent className="p-6">
                             <div className="mb-4">
-                              <p className="text-sm text-gray-600 mb-1">Flujo Libre</p>
-                              <p className="text-2xl font-bold">{formatCurrency(kpiData.ingresos - kpiData.gastos)}</p>
+                              <p className="text-sm text-gray-600 mb-1">Gastos Mensuales</p>
+                              <p className="text-2xl font-bold">{formatCurrency(kpiData.gastos)}</p>
                               <div className="flex items-center gap-1 mt-1">
                                 {getChangeIcon(-3.2)}
                                 <span className="text-sm font-medium text-orange-600">
