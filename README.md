@@ -145,9 +145,6 @@ banorte-open-innovation/
 ### Vistas SQL
 - `v_company_kpis`: KPIs calculados por empresa
 - `v_company_monthly`: Métricas mensuales agregadas
+- `v_personal_monthly`: Métricas mensuales agregadas
 
-### Funciones Stored
-- `kpi_company_fn()`: Cálculo automático de KPIs
-- `decisions_company_fn()`: Generación de recomendaciones
-- `whatif_company_fn()`: Análisis de escenarios
 
