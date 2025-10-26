@@ -120,12 +120,7 @@ const Header: React.FC = () => {
         </div>
 
         {/* Center section: Nav links */}
-        <div className="flex flex-none items-center space-x-8">
-          <a href="#" className="text-gray-300 hover:text-white transition-colors">Home</a>
-          <a href="#" className="text-gray-300 hover:text-white transition-colors">Features</a>
-          <a href="#" className="text-gray-300 hover:text-white transition-colors">About</a>
-          <a href="#" className="text-gray-300 hover:text-white transition-colors">Contact</a>
-        </div>
+
         
         {/* Right section: Button */}
         <div className="flex-1 flex justify-end">
@@ -198,46 +193,46 @@ const CardBackground = () => (
 const features = [
   {
     Icon: ChatBubbleIcon,
-    name: "Asistente Inteligente",
-    description: "Resuelve tus dudas financieras en tiempo real. Proa entiende tu contexto y te guía con respuestas claras y personalizadas.",
-    href: "#",
-    cta: "Pregúntale a Proa",
+    name: "ChatBot Financiero AI",
+    description: "Conversa con Proa, tu asistente financiero inteligente potenciado por Google Gemini. Obtén análisis instantáneos de tus KPIs, recomendaciones personalizadas y respuestas específicas sobre tu situación financiera.",
+    href: "/chatbot",
+    cta: "Chatea con Proa",
     background: <CardBackground />,
     className: "lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3",
   },
   {
     Icon: FileTextIcon,
-    name: "Información Centralizada",
-    description: "Integramos toda tu información financiera para darte una visión 360°, eliminando datos dispersos y complejos.",
-    href: "#",
-    cta: "Unifica tus finanzas",
+    name: "Dashboard Inteligente",
+    description: "Visualiza todos tus datos financieros en tiempo real. Gráficos interactivos, métricas de crecimiento, y análisis de gastos por categoría para usuarios personales y empresariales.",
+    href: "/dashboard",
+    cta: "Ver Dashboard",
     background: <CardBackground />,
     className: "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-3",
   },
   {
     Icon: BellIcon,
-    name: "Análisis Proactivo",
-    description: "Proa identifica tendencias y te alerta sobre posibles problemas antes de que impacten tu flujo de caja.",
-    href: "#",
-    cta: "Anticipa riesgos",
+    name: "Reportes Automáticos",
+    description: "Genera reportes financieros detallados automáticamente. Analiza KPIs empresariales, distribución de gastos, tendencias históricas y recomendaciones de optimización presupuestal.",
+    href: "/reporte",
+    cta: "Ver Reportes",
     background: <CardBackground />,
     className: "lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-4",
   },
   {
     Icon: ArrowUpIcon,
-    name: "Simulador 'What-If'",
-    description: "Proyecta el impacto de tus decisiones antes de tomarlas. Anticipa riesgos y oportunidades con simulaciones dinámicas.",
-    href: "#",
-    cta: "Proyecta tu futuro",
+    name: "MCP Technology",
+    description: "Tecnología Model Context Protocol que enriquece las respuestas de la IA con análisis financiero avanzado, predicciones inteligentes y escenarios 'qué pasaría si'.",
+    href: "/chatbot",
+    cta: "Descubre MCP",
     background: <CardBackground />,
     className: "lg:col-start-3 lg:col-end-3 lg:row-start-1 lg:row-end-2",
   },
   {
     Icon: BarChartIcon,
-    name: "Control Presupuestal",
-    description: "Compara tus gastos contra tu presupuesto en tiempo real y recibe recomendaciones para optimizar tus recursos.",
-    href: "#",
-    cta: "Optimiza tu presupuesto",
+    name: "Gestión de Transacciones",
+    description: "Administra todas tus transacciones financieras desde una interfaz intuitiva. Registra ingresos y gastos, categoriza movimientos y mantén tu información siempre actualizada.",
+    href: "/database",
+    cta: "Gestionar Datos",
     background: <CardBackground />,
     className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
   },
