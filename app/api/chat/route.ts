@@ -12,7 +12,7 @@ import {
   getSmartRecommendations
 } from '@/lib/mcp-client';
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBo9Bgg0OnzOePhrTzkJHuiJCXcVDapNRU';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 export async function POST(request: NextRequest) {
   try {
