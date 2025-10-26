@@ -1,7 +1,48 @@
 // Cliente MCP simplificado para el chatbot de Banorte
 // En lugar de conectar directamente al servidor MCP, haremos llamadas HTTP
 
-import { getPersonalFinancialSummary as getPersonalFinancialSummaryFallback } from '@/services/chatContext';
+import supabase from "@/services/supabase";
+
+// Función local para obtener datos personales (reemplaza chatContext)
+async function getPersonalFinancialSummaryFallback(userId: number) {
+  try {
+    const { data, error } = await supabase
+      .from('personal_tx')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) throw error;
+
+    // Calcular resumen con TODAS las transacciones
+    const totalIngresos = data
+      .filter(tx => tx.tipo === 'ingreso')
+      .reduce((sum, tx) => sum + tx.monto, 0);
+
+    const totalGastos = data
+      .filter(tx => tx.tipo === 'gasto')
+      .reduce((sum, tx) => sum + tx.monto, 0);
+
+    // Gastos por categoría
+    const gastosPorCategoria = data
+      .filter(tx => tx.tipo === 'gasto')
+      .reduce((acc, tx) => {
+        const categoria = tx.categoria || 'Sin categoría';
+        acc[categoria] = (acc[categoria] || 0) + tx.monto;
+        return acc;
+      }, {} as Record<string, number>);
+
+    return {
+      totalIngresos,
+      totalGastos,
+      balance: totalIngresos - totalGastos,
+      gastosPorCategoria,
+      transacciones: data.slice(0, 10).sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()) // Últimas 10 transacciones ordenadas
+    };
+  } catch (error) {
+    console.error('Error getting personal financial summary fallback:', error);
+    return null;
+  }
+}
 
 export interface MCPToolResponse {
   success: boolean;

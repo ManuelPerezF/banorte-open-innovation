@@ -1,13 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from 'next/server';
 import { 
-  getCompanyKPIs, 
-  getCompanyMonthlyData, 
-  getCompanyDecisions,
-  getPersonalFinancialSummary,
-  getPersonalFinancialSummaryFallback 
-} from '@/services/chatContext';
-import { 
   getEnhancedFinancialContext,
   getSmartRecommendations
 } from '@/lib/mcp-client';
@@ -30,155 +23,174 @@ export async function POST(request: NextRequest) {
       apiKey: GEMINI_API_KEY
     });
 
-    // Obtener contexto financiero según el tipo de usuario
+    // Obtener contexto financiero ÚNICAMENTE vía MCP
     let financialContext = '';
     let mcpRecommendations: string[] = [];
     
     try {
-      // Intentar obtener contexto mejorado vía MCP
+      console.log('🤖 Obteniendo contexto vía sistema de análisis avanzado...');
+      
+      // Obtener contexto mejorado vía MCP
       const enhancedContext = await getEnhancedFinancialContext(userType, userId);
       const smartRecommendations = await getSmartRecommendations(userType, userId, message);
       
       financialContext = enhancedContext;
       mcpRecommendations = smartRecommendations;
       
-      console.log('Contexto MCP obtenido exitosamente');
-    } catch (mcpError) {
-      console.warn('Error con MCP, usando contexto tradicional:', mcpError);
-    }
-    
-    // SIEMPRE intentar fallback tradicional si no hay datos suficientes
-    if (!financialContext || !financialContext.includes('$') || financialContext.includes('ERROR')) {
-      console.log('🔄 Usando fallback tradicional para obtener datos');
+      console.log('✅ Contexto de análisis obtenido exitosamente');
+      console.log(`📊 Contexto length: ${financialContext.length}`);
+      console.log(`💡 Recomendaciones: ${mcpRecommendations.length}`);
       
-      if (userType === 'company') {
-        // Obtener datos de la empresa
-        const [kpis, monthlyData, decisions] = await Promise.all([
-          getCompanyKPIs(userId),
-          getCompanyMonthlyData(userId),
-          getCompanyDecisions(userId)
-        ]);
-
-        console.log(`📊 KPIs obtenidos: ${kpis.length} registros`);
-        console.log(`📅 Datos mensuales: ${monthlyData.length} registros`);
-
-        if (kpis.length > 0 || monthlyData.length > 0) {
-          financialContext = `
-DATOS EMPRESA ${userId}:
-
-📊 KPIs RECIENTES:
-${kpis.map(kpi => `
-- Mes: ${kpi.month}
-  💰 Ingresos: $${kpi.ingresos?.toLocaleString() || 'N/A'}
-  💸 Gastos: $${kpi.gastos?.toLocaleString() || 'N/A'}
-  📈 Margen: ${kpi.margen_neto_pct?.toFixed(2) || 'N/A'}%
-  📊 Crecimiento: ${kpi.ingresos_mom_pct?.toFixed(2) || 'N/A'}%
-  🏗️ % Infraestructura: ${kpi.pct_infra?.toFixed(1) || 'N/A'}%
-  👥 % Personal: ${kpi.pct_personal?.toFixed(1) || 'N/A'}%
-  📢 % Marketing: ${kpi.pct_marketing?.toFixed(1) || 'N/A'}%`).join('\n')}
-
-📅 GASTOS POR CATEGORÍA:
-${monthlyData.map(month => `
-- ${month.month}:
-  🏗️ Infraestructura: $${month.g_infra?.toLocaleString() || '0'}
-  👥 Personal: $${month.g_personal?.toLocaleString() || '0'}
-  📢 Marketing: $${month.g_marketing?.toLocaleString() || '0'}
-  🛠️ Servicios: $${month.g_servicios?.toLocaleString() || '0'}
-  💼 Costos: $${month.g_costos?.toLocaleString() || '0'}`).join('\n')}
-`;
-        }
-      } else {
-        // Obtener datos personales - USAR LA FUNCIÓN CORREGIDA CON TODAS LAS TRANSACCIONES
-        const personalSummary = await getPersonalFinancialSummaryFallback(parseInt(userId));
-        
-        if (personalSummary) {
-          const topCategorias = Object.entries(personalSummary.gastosPorCategoria)
-            .sort(([,a], [,b]) => (b as number) - (a as number))
-            .slice(0, 5);
-
-          financialContext = `
-DATOS PERSONALES ${userId}:
-
-💰 RESUMEN:
-- Ingresos totales: $${personalSummary.totalIngresos.toLocaleString()}
-- Gastos totales: $${personalSummary.totalGastos.toLocaleString()}
-- Balance: $${personalSummary.balance.toLocaleString()}
-
-📊 TOP GASTOS:
-${topCategorias.map(([categoria, monto]) => `
-- ${categoria}: $${(monto as number).toLocaleString()}`).join('\n')}
-
-📋 ÚLTIMAS TRANSACCIONES:
-${personalSummary.transacciones.slice(0, 5).map(tx => `
-- ${tx.fecha}: ${tx.tipo === 'ingreso' ? '💰' : '💸'} $${tx.monto.toLocaleString()} - ${tx.descripcion || tx.categoria || 'Sin descripción'}`).join('\n')}
-`;
-        }
-      }
-    }
-
-    // Agregar recomendaciones MCP al contexto si están disponibles
-    const mcpSection = mcpRecommendations.length > 0 ? `
-
-🤖 DATOS MCP:
-${mcpRecommendations.map((rec, index) => `${index + 1}. ${rec}`).join('\n')}
-` : '';
-
-    // Verificar que tenemos datos reales
-    let hasRealData = false;
-    if (userType === 'company') {
-      hasRealData = financialContext.includes('$') && (financialContext.includes('Ingresos:') || financialContext.includes('KPIs'));
-    } else {
-      hasRealData = financialContext.includes('$') && financialContext.includes('Balance');
-    }
-
-
-    if (!hasRealData) {
+    } catch (mcpError) {
+      console.error('❌ Error con sistema de análisis:', mcpError);
+      
+      // Si MCP falla, retornar error informativo
       return NextResponse.json({ 
-        response: userType === 'company' 
-          ? `No encuentro datos financieros para la empresa ID: ${userId}. Verifica que tengas KPIs registrados en la vista v_company_kpis.`
-          : "No encuentro tus datos financieros. Agrega algunas transacciones en la sección de Datos para que pueda ayudarte."
+        response: `🤖 Error del sistema de análisis: ${mcpError instanceof Error ? mcpError.message : 'Error desconocido'}. 
+        
+El chatbot está configurado para funcionar con tecnología avanzada de análisis financiero. Verifica que:
+• El sistema de análisis esté funcionando
+• Los datos estén disponibles en la base de datos
+• La conexión sea estable
+
+Por favor, intenta de nuevo en unos momentos.`
       });
     }
 
-    // Crear el contexto del prompt basado en el tipo de usuario
-    const systemContext = `Eres un asistente financiero especializado de Banorte. Tu trabajo es dar respuestas INFORMATIVAS y ESPECÍFICAS basadas en los datos reales del usuario.
+    // Agregar recomendaciones MCP al contexto
+    const mcpSection = mcpRecommendations.length > 0 ? `
 
-DATOS DEL USUARIO:
+🤖 ANÁLISIS INTELIGENTE AVANZADO:
+${mcpRecommendations.map((rec, index) => `${index + 1}. ${rec}`).join('\n')}
+` : '';
+
+    // Verificar que MCP proporcionó datos
+    if (!financialContext || financialContext.trim().length === 0) {
+      return NextResponse.json({ 
+        response: `🤖 No se pudieron obtener datos financieros para ${userType === 'company' ? 'la empresa' : 'el usuario'} ID: ${userId}.
+        
+Por favor verifica que:
+• Tengas transacciones registradas en la base de datos
+• El sistema de análisis esté funcionando correctamente
+• Tu ID de ${userType === 'company' ? 'empresa' : 'usuario'} sea válido
+
+Intenta agregar datos en la sección "Datos" primero.`
+      });
+    }
+
+    // Crear el contexto del prompt basado EXCLUSIVAMENTE en MCP
+   const systemContext = `Eres un ASESOR FINANCIERO PROFESIONAL certificado de Banorte con tecnología avanzada de análisis. Tu misión es proporcionar análisis profundo, estrategias personalizadas y recomendaciones accionables basadas en análisis inteligente de datos.
+
+🤖 SISTEMA DE ANÁLISIS AVANZADO:
+- Análisis profundo de patrones financieros
+- Predicciones inteligentes basadas en datos históricos
+- Recomendaciones personalizadas de alta precisión
+- Procesamiento de información en tiempo real
+
+🏦 PERFIL DEL ASESOR:
+- Especialista en planificación financiera personal y empresarial
+- Certificado en análisis de riesgo y gestión patrimonial
+- Experto en productos bancarios Banorte
+- Conocimiento profundo de mercados financieros mexicanos
+- POTENCIADO POR TECNOLOGÍA AVANZADA PARA ANÁLISIS SUPERIOR
+
+👤 DATOS DEL CLIENTE:
 - Tipo: ${userType === 'personal' ? 'Personal' : 'Empresarial'}
 - ID: ${userId}
-- Sistema: ${mcpRecommendations.length > 0 ? '🤖 MCP Activo' : '📊 Tradicional'}
+- Sistema: 🤖 ANÁLISIS AVANZADO ACTIVADO
 
+📊 ANÁLISIS FINANCIERO INTELIGENTE:
 ${financialContext}${mcpSection}
 
-REGLAS PARA RESPUESTAS:
-1. SIEMPRE usar números reales de los datos mostrados arriba
-2. Respuestas de 3-6 líneas (ni muy cortas ni muy largas)
-3. Incluir el dato principal + contexto relevante + una recomendación breve
-4. Para KPIs: mostrar número + comparación + estado actual
-5. Para gastos: mostrar categorías principales + porcentajes + observación
+🎯 METODOLOGÍA AVANZADA:
+1. DIAGNÓSTICO INTELIGENTE: Análisis de patrones con IA
+2. EVALUACIÓN PREDICTIVA: Identificación de tendencias futuras
+3. ESTRATEGIA PERSONALIZADA: Recomendaciones basadas en datos
+4. PRODUCTOS OPTIMIZADOS: Soluciones Banorte con mayor ajuste al perfil
 
-FORMATO DE RESPUESTAS:
-- Datos específicos: "Tu [métrica] es $X. [Contexto]. [Recomendación breve]"
-- Tendencias: "[Métrica]: $X (vs anterior: +Y%). [Interpretación]. [Siguiente paso]"  
-- Gastos: "Principales gastos: [3 categorías con montos]. [Análisis]. [Sugerencia]"
-- Estado general: "[Estado] - [Razón] + [Dato de apoyo] + [Consejo]"
+📋 ESTRUCTURA DE RESPUESTAS (4-7 líneas):
+- **Diagnóstico IA**: Estado actual con análisis de patrones
+- **Predicción Inteligente**: Tendencias identificadas por el sistema
+- **Recomendación Optimizada**: Acción personalizada por algoritmos
+- **Producto Banorte Smart**: Solución bancaria con mayor compatibilidad
+
 
 ${userType === 'company' ? `
-RESPUESTAS TIPO EMPRESA:
-- KPIs: Número + contexto de crecimiento + estado del margen + recomendación
-- Gastos: Top 3 categorías con % + comparación con estándares + sugerencia de optimización
-- Tendencias: Crecimiento actual + análisis del período + pronóstico simple
-- Estado: Evaluación general + métricas clave + acción recomendada
+🏢 ESPECIALIZACIÓN EMPRESARIAL AVANZADA:
+• **Análisis Cash Flow IA**: Evaluación predictiva de liquidez con patrones históricos
+• **Optimización Costos Inteligente**: Identificación automática de gastos optimizables
+• **Crecimiento Predictivo**: Planes de expansión basados en análisis de tendencias
+• **Gestión Riesgo Avanzada**: Diversificación inteligente con algoritmos de protección
+• **Productos Banorte IA**: Recomendaciones de créditos, factoraje, nómina optimizadas
+
+BENCHMARKS INTELIGENTES:
+- Análisis comparativo automático con industria
+- Predicción de margen neto óptimo personalizado
+- Evaluación dinámica de gastos operativos
+- Proyección de crecimiento sostenible adaptativo
+- Cálculo de liquidez predictivo
+
+RESPUESTAS EMPRESARIALES AVANZADAS:
+- KPIs + análisis predictivo + estrategia IA + producto Banorte optimizado
+- Flujo de caja + predicciones inteligentes + optimización automática + solución financiera
+- Costos + benchmarking IA + plan de reducción predictivo + herramientas bancarias smart
+- Crecimiento + análisis de viabilidad + financiamiento personalizado + productos optimizados
 ` : `
-RESPUESTAS TIPO PERSONAL:
-- Balance: Monto + evaluación + categoría principal + consejo de ahorro
-- Gastos: Top 3 categorías + porcentaje del total + recomendación
-- Situación: Estado actual + comparación temporal + próximo paso
+👤 ESPECIALIZACIÓN PERSONAL AVANZADA:
+• **Presupuesto Inteligente IA**: Análisis automático 50/30/20 con optimización personalizada
+• **Ahorro Estratégico Inteligente**: Predicción de metas financieras con algoritmos adaptativos
+• **Inversión Progresiva IA**: Diversificación automática según perfil de riesgo
+• **Protección Patrimonial Smart**: Seguros y planificación predictiva de herencia
+• **Productos Banorte IA**: Cuentas, tarjetas, seguros, inversiones optimizadas
+
+ESTÁNDARES FINANCIEROS INTELIGENTES:
+- Fondo de emergencia personalizado: Cálculo IA basado en patrones de gasto
+- Ahorro mensual optimizado: Porcentaje dinámico según análisis de datos
+- Gestión de deudas predictiva: Estrategias personalizadas por algoritmos
+- Gastos fijos inteligentes: Optimización automática de distribución
+
+RESPUESTAS PERSONALES AVANZADAS:
+- Balance + evaluación IA de salud financiera + plan de mejora predictivo + producto Banorte optimizado
+- Gastos + análisis de patrones + estrategia de optimización automática + herramientas de control inteligentes
+- Ahorro + progreso predictivo hacia metas + plan de inversión IA + productos personalizados
+- Deudas + estrategia de pago optimizada + consolidación inteligente + opciones de crédito avanzadas
 `}
 
-Pregunta: "${message}"
+🛡️ PRODUCTOS BANORTE RELEVANTES:
+- **Cuentas**: Banorte Fácil, Banorte Oro, Banorte Platino
+- **Tarjetas**: TDC Banorte, TDC Oro, TDC Platino
+- **Inversiones**: Fondos de inversión, CETES, Bonos, Acciones
+- **Créditos**: Personal, hipotecario, automotriz, empresarial
+- **Seguros**: Vida, auto, casa, gastos médicos, empresarial
+- **Servicios**: Nómina, transferencias, banca digital, asesoría
 
-RESPUESTA (3-6 líneas informativas con datos específicos):`;
+💡 ENFOQUE CONSULTIVO AVANZADO:
+- Utilizar análisis predictivo y patrones identificados por el sistema
+- Proporcionar recomendaciones basadas en inteligencia artificial
+- Considerar el perfil de riesgo calculado automáticamente por IA
+- Ofrecer soluciones escalables y adaptables según algoritmos avanzados
+- Fomentar educación financiera personalizada por IA
+
+Pregunta del cliente: "${message}"
+
+🔍 INSTRUCCIONES DE RESPUESTA AVANZADA:
+Como asesor financiero profesional con tecnología avanzada, analiza la pregunta utilizando los datos y análisis inteligente proporcionados, y proporciona una respuesta que incluya:
+
+1. **DIAGNÓSTICO IA**: Estado actual con números específicos y patrones identificados
+2. **ANÁLISIS PREDICTIVO**: Interpretación experta basada en análisis de tendencias
+3. **RECOMENDACIÓN INTELIGENTE**: Acción concreta personalizada por algoritmos
+4. **SOLUCIÓN BANORTE IA**: Producto o servicio específico optimizado por análisis
+
+⚠️ REGLAS CRÍTICAS AVANZADAS:
+- SIEMPRE usar datos reales del análisis inteligente proporcionado
+- Aprovechar las predicciones y patrones identificados por el sistema
+- Mantener tono profesional pero accesible
+- Respuestas de 4-7 líneas (información completa pero concisa)
+- Incluir productos Banorte relevantes recomendados por análisis IA
+- Dar recomendaciones accionables basadas en IA, no solo información
+- Considerar benchmarks personalizados calculados por el sistema
+
+💼 RESPUESTA DEL ASESOR FINANCIERO BANORTE AVANZADO:`;
 
     // Generar contenido con Gemini
     const response = await ai.models.generateContent({
