@@ -270,7 +270,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cómo van mis ventas este mes?')}
                           disabled={isLoading}
                         >
-                          � Ventas del mes
+                          💲 Ventas del mes
                         </Button>
                         <Button
                           variant="outline"
@@ -286,7 +286,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿En qué categoría gasto más dinero?')}
                           disabled={isLoading}
                         >
-                          � Mayor gasto
+                          📉 Mayor gasto
                         </Button>
                         <Button
                           variant="outline"
@@ -294,7 +294,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cómo está mi crecimiento mensual?')}
                           disabled={isLoading}
                         >
-                          � Crecimiento
+                          📈 Crecimiento
                         </Button>
                         <Button
                           variant="outline"
@@ -302,7 +302,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Qué puedo optimizar para ahorrar?')}
                           disabled={isLoading}
                         >
-                          � Optimizar gastos
+                          🔋 Optimizar gastos
                         </Button>
                       </>
                     ) : (
@@ -321,7 +321,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿En qué categoría gasto más?')}
                           disabled={isLoading}
                         >
-                          � Mayor gasto
+                          📉 Mayor gasto
                         </Button>
                         <Button
                           variant="outline"
@@ -329,7 +329,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('Muéstrame mis gastos por categoría')}
                           disabled={isLoading}
                         >
-                          � Gastos por categoría
+                          💲 Gastos por categoría
                         </Button>
                         <Button
                           variant="outline"
@@ -353,7 +353,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cuánto he gastado en total?')}
                           disabled={isLoading}
                         >
-                          � Total gastado
+                          💳 Total gastado
                         </Button>
                       </>
                     )}

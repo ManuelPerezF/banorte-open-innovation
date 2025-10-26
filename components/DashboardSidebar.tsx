@@ -120,8 +120,8 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
         <div className="flex items-center gap-3 p-4">
           <BanorteLogo size="md" />
           <div>
-            <h1 className="text-lg font-semibold">Banorte</h1>
-            <p className="text-sm text-muted-foreground">PyME</p>
+            <h1 className="text-lg font-semibold">Proa</h1>
+            <p className="text-sm text-muted-foreground">By Banorte</p>
           </div>
         </div>
       </SidebarHeader>
