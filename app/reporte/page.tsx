@@ -422,8 +422,8 @@ export default function ReportePage() {
                           <p className="font-semibold">Personal</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600 mb-1">Período</p>
-                          <p className="font-semibold">Histórico Completo</p>
+                          <p className="text-sm text-gray-600 mb-1">Usuario</p>
+                          <p className="font-semibold">{userName || 'Usuario'}</p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-600 mb-1">Ingresos Totales</p>

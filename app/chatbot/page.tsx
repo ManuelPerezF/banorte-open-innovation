@@ -21,7 +21,7 @@ export default function ChatbotPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: '¡Hola! Soy tu asistente financiero de Banorte potenciado por tecnología MCP (Model Context Protocol). 🤖\n\nPuedo ayudarte con:\n• 📊 Análisis avanzado de KPIs\n• 🔮 Predicciones financieras inteligentes\n• ⚡ Optimizaciones presupuestarias\n• 🎯 Escenarios "qué pasaría si"\n• 💡 Recomendaciones personalizadas\n\n¿En qué puedo ayudarte hoy?',
+      text: '¡Hola! Soy tu asistente financiero de Banorte. ¿En qué puedo ayudarte hoy?',
       sender: 'bot',
       timestamp: new Date()
     }
@@ -34,8 +34,6 @@ export default function ChatbotPage() {
     // Obtener información de la sesión
     const storedUserType = sessionStorage.getItem('userType') as 'personal' | 'company';
     const storedUserId = sessionStorage.getItem('userId');
-    
-    console.log('🔍 Debug chatbot - UserType:', storedUserType, 'UserId:', storedUserId);
     
     if (!storedUserType || !storedUserId) {
       window.location.href = '/login';
@@ -56,8 +54,7 @@ export default function ChatbotPage() {
 
   const sendMessageToGemini = async (message: string) => {
     try {
-      console.log('📤 Enviando mensaje:', message, 'UserType:', userType, 'UserId:', userId);
-      
+    
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -72,12 +69,12 @@ export default function ChatbotPage() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('❌ Error en respuesta:', errorData);
+        console.error(' Error en respuesta:', errorData);
         throw new Error(errorData.error || 'Error en la respuesta del servidor');
       }
 
       const data = await response.json();
-      console.log('✅ Respuesta recibida:', data.response?.substring(0, 100) + '...');
+      console.log(' Respuesta recibida:', data.response?.substring(0, 100) + '...');
       return data.response;
     } catch (error) {
       console.error('Error al enviar mensaje a Gemini:', error);
@@ -262,7 +259,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cuáles son mis ingresos y margen actuales?')}
                           disabled={isLoading}
                         >
-                          💰 Ingresos y margen
+                          Ingresos y margen
                         </Button>
                         <Button
                           variant="outline"
@@ -270,7 +267,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cómo van mis ventas este mes?')}
                           disabled={isLoading}
                         >
-                          💲 Ventas del mes
+                          Ventas del mes
                         </Button>
                         <Button
                           variant="outline"
@@ -278,7 +275,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('Muéstrame mi distribución de gastos por categoría')}
                           disabled={isLoading}
                         >
-                          📊 Gastos por categoría
+                          Gastos por categoría
                         </Button>
                         <Button
                           variant="outline"
@@ -286,7 +283,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿En qué categoría gasto más dinero?')}
                           disabled={isLoading}
                         >
-                          📉 Mayor gasto
+                          Mayor gasto
                         </Button>
                         <Button
                           variant="outline"
@@ -294,7 +291,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cómo está mi crecimiento mensual?')}
                           disabled={isLoading}
                         >
-                          📈 Crecimiento
+                          Crecimiento
                         </Button>
                         <Button
                           variant="outline"
@@ -302,7 +299,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Qué puedo optimizar para ahorrar?')}
                           disabled={isLoading}
                         >
-                          🔋 Optimizar gastos
+                          Optimizar gastos
                         </Button>
                       </>
                     ) : (
@@ -313,7 +310,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cuál es mi balance actual?')}
                           disabled={isLoading}
                         >
-                          💰 Mi balance
+                          Mi balance
                         </Button>
                         <Button
                           variant="outline"
@@ -321,7 +318,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿En qué categoría gasto más?')}
                           disabled={isLoading}
                         >
-                          📉 Mayor gasto
+                          Mayor gasto
                         </Button>
                         <Button
                           variant="outline"
@@ -329,7 +326,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('Muéstrame mis gastos por categoría')}
                           disabled={isLoading}
                         >
-                          💲 Gastos por categoría
+                          Gastos por categoría
                         </Button>
                         <Button
                           variant="outline"
@@ -337,7 +334,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cómo puedo ahorrar más?')}
                           disabled={isLoading}
                         >
-                          🏦 Tips ahorro
+                          Tips ahorro
                         </Button>
                         <Button
                           variant="outline"
@@ -345,7 +342,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Estoy gastando mucho?')}
                           disabled={isLoading}
                         >
-                          ⚠️ Evaluar gastos
+                          Evaluar gastos
                         </Button>
                         <Button
                           variant="outline"
@@ -353,7 +350,7 @@ export default function ChatbotPage() {
                           onClick={() => setInputMessage('¿Cuánto he gastado en total?')}
                           disabled={isLoading}
                         >
-                          💳 Total gastado
+                          Total gastado
                         </Button>
                       </>
                     )}
