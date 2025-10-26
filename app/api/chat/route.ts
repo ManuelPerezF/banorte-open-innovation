@@ -108,10 +108,10 @@ ${financialContext}${mcpSection}
 3. ESTRATEGIA PERSONALIZADA: Recomendaciones basadas en datos
 4. PRODUCTOS OPTIMIZADOS: Soluciones Banorte con mayor ajuste al perfil
 
-📋 ESTRUCTURA DE RESPUESTAS (4-7 líneas):
+📋 ESTRUCTURA DE RESPUESTAS (4-10 líneas):
 - **Diagnóstico IA**: Estado actual con análisis de patrones
 - **Predicción Inteligente**: Tendencias identificadas por el sistema
-- **Solución Banorte**: Solución bancaria con mayor compatibilidad
+- **Solución Banorte**: Solución bancaria con mayor compatibilidad si es que hay, si no hay no mostrar
 
 
 ${userType === 'company' ? `
@@ -120,7 +120,7 @@ ${userType === 'company' ? `
 • **Optimización Costos Inteligente**: Identificación automática de gastos optimizables
 • **Crecimiento Predictivo**: Planes de expansión basados en análisis de tendencias
 • **Gestión Riesgo Avanzada**: Diversificación inteligente con algoritmos de protección
-• **Productos Banorte IA**: Recomendaciones de créditos, factoraje, nómina optimizadas
+• **Productos Banorte**: Recomendaciones de créditos, factoraje, nómina optimizadas
 
 BENCHMARKS INTELIGENTES:
 - Análisis comparativo automático con industria
@@ -130,7 +130,7 @@ BENCHMARKS INTELIGENTES:
 - Cálculo de liquidez predictivo
 
 RESPUESTAS EMPRESARIALES AVANZADAS:
-- KPIs + análisis predictivo + estrategia IA + producto Banorte optimizado
+- KPIs + análisis predictivo + producto Banorte optimizado
 - Flujo de caja + predicciones inteligentes + optimización automática + solución financiera
 - Costos + benchmarking IA + plan de reducción predictivo + herramientas bancarias
 - Crecimiento + análisis de viabilidad + financiamiento personalizado + productos optimizados
@@ -151,7 +151,7 @@ ESTÁNDARES FINANCIEROS INTELIGENTES:
 RESPUESTAS PERSONALES AVANZADAS:
 - Balance + evaluación IA de salud financiera + plan de mejora predictivo + producto Banorte optimizado
 - Gastos + análisis de patrones + estrategia de optimización automática + herramientas de control
-- Ahorro + progreso predictivo hacia metas + plan de inversión IA + productos personalizados
+- Ahorro + progreso predictivo hacia metas + + productos personalizados
 - Deudas + estrategia de pago optimizada + consolidación inteligente + opciones de crédito
 `}
 
@@ -168,7 +168,7 @@ RESPUESTAS PERSONALES AVANZADAS:
 - Proporcionar recomendaciones basadas en inteligencia artificial
 - Considerar el perfil de riesgo calculado automáticamente por IA
 - Ofrecer soluciones escalables y adaptables según algoritmos avanzados
-- Fomentar educación financiera personalizada por IA
+
 
 Pregunta del cliente: "${message}"
 
