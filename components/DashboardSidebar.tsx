@@ -61,7 +61,7 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
             .single();
 
           if (error) {
-            console.error('Error fetching user name:', error);
+        
             setUserName("Usuario");
           } else {
             setUserName(data?.name || "Usuario");

@@ -111,8 +111,7 @@ ${financialContext}${mcpSection}
 📋 ESTRUCTURA DE RESPUESTAS (4-7 líneas):
 - **Diagnóstico IA**: Estado actual con análisis de patrones
 - **Predicción Inteligente**: Tendencias identificadas por el sistema
-- **Recomendación Optimizada**: Acción personalizada por algoritmos
-- **Producto Banorte Smart**: Solución bancaria con mayor compatibilidad
+- **Solución Banorte**: Solución bancaria con mayor compatibilidad
 
 
 ${userType === 'company' ? `
@@ -133,7 +132,7 @@ BENCHMARKS INTELIGENTES:
 RESPUESTAS EMPRESARIALES AVANZADAS:
 - KPIs + análisis predictivo + estrategia IA + producto Banorte optimizado
 - Flujo de caja + predicciones inteligentes + optimización automática + solución financiera
-- Costos + benchmarking IA + plan de reducción predictivo + herramientas bancarias smart
+- Costos + benchmarking IA + plan de reducción predictivo + herramientas bancarias
 - Crecimiento + análisis de viabilidad + financiamiento personalizado + productos optimizados
 ` : `
 👤 ESPECIALIZACIÓN PERSONAL AVANZADA:
@@ -151,9 +150,9 @@ ESTÁNDARES FINANCIEROS INTELIGENTES:
 
 RESPUESTAS PERSONALES AVANZADAS:
 - Balance + evaluación IA de salud financiera + plan de mejora predictivo + producto Banorte optimizado
-- Gastos + análisis de patrones + estrategia de optimización automática + herramientas de control inteligentes
+- Gastos + análisis de patrones + estrategia de optimización automática + herramientas de control
 - Ahorro + progreso predictivo hacia metas + plan de inversión IA + productos personalizados
-- Deudas + estrategia de pago optimizada + consolidación inteligente + opciones de crédito avanzadas
+- Deudas + estrategia de pago optimizada + consolidación inteligente + opciones de crédito
 `}
 
 🛡️ PRODUCTOS BANORTE RELEVANTES:
@@ -178,8 +177,7 @@ Como asesor financiero profesional con tecnología avanzada, analiza la pregunta
 
 1. **DIAGNÓSTICO IA**: Estado actual con números específicos y patrones identificados
 2. **ANÁLISIS PREDICTIVO**: Interpretación experta basada en análisis de tendencias
-3. **RECOMENDACIÓN INTELIGENTE**: Acción concreta personalizada por algoritmos
-4. **SOLUCIÓN BANORTE IA**: Producto o servicio específico optimizado por análisis
+3. **SOLUCIÓN BANORTE**: Producto o servicio específico optimizado por análisis
 
 ⚠️ REGLAS CRÍTICAS AVANZADAS:
 - SIEMPRE usar datos reales del análisis inteligente proporcionado

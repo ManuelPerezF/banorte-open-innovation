@@ -167,9 +167,12 @@ const HeroSection: React.FC = () => {
           Tu copiloto financiero inteligente. Transforma tus datos en decisiones claras y proactivas para anticipar el futuro de tu negocio.
         </p>
         <div className="flex space-x-4">
-          <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105 duration-300 shadow-lg">
+          <Link 
+            href="/login"
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105 duration-300 shadow-lg"
+          >
             Descubre Proa
-          </button>
+          </Link>
           <Link 
             href="/login"
             className="bg-white/10 backdrop-blur-sm text-white font-semibold py-3 px-8 rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-300 shadow-lg"
