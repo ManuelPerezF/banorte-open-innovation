@@ -145,7 +145,7 @@ export function LoginForm() {
             onChange={(e) => setUserId(e.target.value)}
             required
             className="w-full px-3 py-2 border border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            placeholder={userType === "personal" ? "Ej: 47" : "Ej: E016"}
+            placeholder={userType === "personal" ? "Tu número de cliente" : "Ej: E016"}
           />
         </div>
 

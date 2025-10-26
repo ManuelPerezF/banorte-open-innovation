@@ -89,7 +89,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
           <Input
             id="id"
             type="text"
-            placeholder="47"
+            placeholder="Tu número de cliente"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
             required

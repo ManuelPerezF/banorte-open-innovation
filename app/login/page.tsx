@@ -6,12 +6,9 @@ import { LoginForm } from "@/components/login-form";
 export default function LoginPage() {
   
   return (
-    // MODIFICADO: Cambiado de grid-cols-6 a grid-cols-3
+
     <div className="grid min-h-svh lg:grid-cols-3">
       
-      {/* MODIFICADO:
-        1. Ahora es lg:col-span-2 (ocupa 2 de 3 columnas)
-      */}
       <div className="flex flex-col gap-4 p-6 md:p-10 lg:col-span-2 bg-gradient-to-r from-red-900 to-black">
         
         {/* Encabezado */}
@@ -33,9 +30,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* MODIFICADO:
-        1. Ahora es lg:col-span-1 (ocupa 1 de 3 columnas)
-      */}
       <div className="bg-black relative hidden lg:block p-10 lg:col-span-1">
         
         <div className="absolute inset-0 flex items-center justify-start p-12">

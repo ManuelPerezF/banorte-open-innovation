@@ -221,7 +221,7 @@ const features = [
   {
     Icon: ArrowUpIcon,
     name: "MCP Technology",
-    description: "Tecnología Model Context Protocol que enriquece las respuestas de la IA con análisis financiero avanzado, predicciones inteligentes y escenarios 'qué pasaría si'.",
+    description: "Tecnología Model Context Protocol que enriquece las respuestas de la IA con análisis financiero avanzado, predicciones inteligentes.",
     href: "/chatbot",
     cta: "Descubre MCP",
     background: <CardBackground />,
