@@ -35,6 +35,8 @@ export default function ChatbotPage() {
     const storedUserType = sessionStorage.getItem('userType') as 'personal' | 'company';
     const storedUserId = sessionStorage.getItem('userId');
     
+    console.log('🔍 Debug chatbot - UserType:', storedUserType, 'UserId:', storedUserId);
+    
     if (!storedUserType || !storedUserId) {
       window.location.href = '/login';
       return;
@@ -54,6 +56,8 @@ export default function ChatbotPage() {
 
   const sendMessageToGemini = async (message: string) => {
     try {
+      console.log('📤 Enviando mensaje:', message, 'UserType:', userType, 'UserId:', userId);
+      
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -68,10 +72,12 @@ export default function ChatbotPage() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Error en respuesta:', errorData);
         throw new Error(errorData.error || 'Error en la respuesta del servidor');
       }
 
       const data = await response.json();
+      console.log('✅ Respuesta recibida:', data.response?.substring(0, 100) + '...');
       return data.response;
     } catch (error) {
       console.error('Error al enviar mensaje a Gemini:', error);
@@ -253,70 +259,50 @@ export default function ChatbotPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('🤖 Analiza mis KPIs con tecnología MCP avanzada')}
+                          onClick={() => setInputMessage('¿Cuáles son mis ingresos y margen actuales?')}
                           disabled={isLoading}
-                          className="border-purple-200 hover:border-purple-300"
                         >
-                          🤖 Análisis MCP Avanzado
+                          💰 Ingresos y margen
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('🔮 Predice mis tendencias financieras para los próximos 3 meses usando MCP')}
+                          onClick={() => setInputMessage('¿Cómo van mis ventas este mes?')}
                           disabled={isLoading}
-                          className="border-blue-200 hover:border-blue-300"
                         >
-                          🔮 Predicción MCP
+                          � Ventas del mes
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('⚡ Optimiza mi presupuesto con recomendaciones MCP inteligentes')}
+                          onClick={() => setInputMessage('Muéstrame mi distribución de gastos por categoría')}
                           disabled={isLoading}
-                          className="border-green-200 hover:border-green-300"
                         >
-                          ⚡ Optimización MCP
+                          📊 Gastos por categoría
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('🎯 Calcula escenarios "qué pasaría si" usando herramientas MCP')}
+                          onClick={() => setInputMessage('¿En qué categoría gasto más dinero?')}
                           disabled={isLoading}
-                          className="border-orange-200 hover:border-orange-300"
                         >
-                          🎯 Escenarios MCP
+                          � Mayor gasto
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('¿Cuáles son mis KPIs más recientes?')}
+                          onClick={() => setInputMessage('¿Cómo está mi crecimiento mensual?')}
                           disabled={isLoading}
                         >
-                          📊 Ver KPIs actuales
+                          � Crecimiento
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('Analiza mis gastos por categoría del último mes')}
+                          onClick={() => setInputMessage('¿Qué puedo optimizar para ahorrar?')}
                           disabled={isLoading}
                         >
-                          📈 Analizar gastos
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setInputMessage('¿Qué recomendaciones tienes para mejorar mi margen de ganancia?')}
-                          disabled={isLoading}
-                        >
-                          💡 Mejorar márgenes
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setInputMessage('¿Cómo está mi tendencia de crecimiento mes a mes?')}
-                          disabled={isLoading}
-                        >
-                          📉 Tendencias
+                          � Optimizar gastos
                         </Button>
                       </>
                     ) : (
@@ -324,52 +310,50 @@ export default function ChatbotPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('🤖 Genera un reporte financiero personal completo usando MCP')}
+                          onClick={() => setInputMessage('¿Cuál es mi balance actual?')}
                           disabled={isLoading}
-                          className="border-purple-200 hover:border-purple-300"
                         >
-                          🤖 Reporte MCP Personal
+                          💰 Mi balance
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('💡 Dame recomendaciones inteligentes MCP para mis finanzas personales')}
+                          onClick={() => setInputMessage('¿En qué categoría gasto más?')}
                           disabled={isLoading}
-                          className="border-blue-200 hover:border-blue-300"
                         >
-                          💡 Consejos MCP Inteligentes
+                          � Mayor gasto
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('¿Cómo está mi situación financiera actual?')}
+                          onClick={() => setInputMessage('Muéstrame mis gastos por categoría')}
                           disabled={isLoading}
                         >
-                          💰 Mi situación actual
+                          � Gastos por categoría
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('Analiza mis gastos por categoría')}
+                          onClick={() => setInputMessage('¿Cómo puedo ahorrar más?')}
                           disabled={isLoading}
                         >
-                          📊 Analizar gastos
+                          🏦 Tips ahorro
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('¿Cómo puedo ahorrar más dinero?')}
+                          onClick={() => setInputMessage('¿Estoy gastando mucho?')}
                           disabled={isLoading}
                         >
-                          🏦 Tips de ahorro
+                          ⚠️ Evaluar gastos
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setInputMessage('Dame consejos para mejorar mis finanzas')}
+                          onClick={() => setInputMessage('¿Cuánto he gastado en total?')}
                           disabled={isLoading}
                         >
-                          💡 Consejos personalizados
+                          � Total gastado
                         </Button>
                       </>
                     )}

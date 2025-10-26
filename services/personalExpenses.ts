@@ -84,9 +84,39 @@ async function getMonthlyExpenseSummary(userId: number) {
   };
 }
 
+// Nueva función que incluye TODOS los datos históricos (sin filtro de mes)
+async function getAllTimeExpenseSummary(userId: number) {
+  const { data, error } = await supabase
+    .from("personal_tx")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const summary = data?.reduce(
+    (acc, tx) => {
+      if (tx.tipo === "ingreso") {
+        acc.totalIngresos += tx.monto;
+      } else {
+        acc.totalGastos += tx.monto;
+      }
+      return acc;
+    },
+    { totalIngresos: 0, totalGastos: 0 }
+  );
+
+  return {
+    ...summary,
+    balance: summary ? summary.totalIngresos - summary.totalGastos : 0,
+  };
+}
+
 export {
   getPersonalExpenses,
   getPersonalExpensesByCategory,
   getMonthlyExpenseSummary,
+  getAllTimeExpenseSummary,
   type PersonalTransaction,
 };

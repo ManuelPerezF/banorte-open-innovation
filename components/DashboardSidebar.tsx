@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import BanorteLogo from "./BanorteLogo";
+import supabase from "@/services/supabase";
 import {
   LayoutDashboard,
   TrendingUp,
@@ -29,6 +32,54 @@ interface DashboardSidebarProps {
 }
 
 const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
+  const [companyName, setCompanyName] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (userType === "company") {
+          const { data, error } = await supabase
+            .from('companies')
+            .select('name')
+            .eq('id', userId)
+            .single();
+
+          if (error) {
+            console.error('Error fetching company name:', error);
+            setCompanyName("Empresa");
+          } else {
+            setCompanyName(data?.name || "Empresa");
+          }
+        } else {
+          // Para usuarios personales
+          const { data, error } = await supabase
+            .from('app_users')
+            .select('name')
+            .eq('id', parseInt(userId))
+            .single();
+
+          if (error) {
+            console.error('Error fetching user name:', error);
+            setUserName("Usuario");
+          } else {
+            setUserName(data?.name || "Usuario");
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        if (userType === "company") {
+          setCompanyName("Empresa");
+        } else {
+          setUserName("Usuario");
+        }
+      }
+      setIsLoading(false);
+    };
+
+    fetchUserData();
+  }, [userType, userId]);
   const handleNavigation = (path: string) => {
     if (path === "/logout") {
       sessionStorage.clear();
@@ -53,7 +104,7 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
     {
       title: "Reporte",
       icon: FileText,
-      path: "/reports",
+      path: "/reporte",
     },
     {
       title: "ChatBot",
@@ -110,10 +161,15 @@ const DashboardSidebar = ({ userType, userId }: DashboardSidebarProps) => {
               )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">
-                  {userType === "personal" ? "Personal" : "Empresarial"}
+                  {isLoading 
+                    ? "Cargando..." 
+                    : userType === "personal" 
+                      ? userName
+                      : companyName
+                  }
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
-                  ID: {userId}
+                  {userType === "personal" ? "Usuario Personal" : "Empresa"} • ID: {userId}
                 </p>
               </div>
             </div>

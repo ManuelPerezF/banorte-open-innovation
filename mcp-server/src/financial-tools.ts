@@ -572,12 +572,12 @@ async function generateCompanyReport(companyId: string, reportType: string, peri
 
 export async function getPersonalFinancialSummary(userId: number) {
   try {
+    // Obtener todas las transacciones del usuario
     const { data, error } = await supabase
       .from('personal_tx')
       .select('*')
       .eq('user_id', userId)
-      .order('fecha', { ascending: false })
-      .limit(50);
+      .order('fecha', { ascending: false });
 
     if (error) throw error;
 
@@ -589,14 +589,53 @@ export async function getPersonalFinancialSummary(userId: number) {
       .filter(tx => tx.tipo === 'gasto')
       .reduce((sum, tx) => sum + tx.monto, 0);
 
+    // Agrupar gastos por categoría
+    const gastosPorCategoria = data
+      .filter(tx => tx.tipo === 'gasto')
+      .reduce((acc, tx) => {
+        const categoria = tx.categoria || 'Sin categoría';
+        acc[categoria] = (acc[categoria] || 0) + tx.monto;
+        return acc;
+      }, {} as Record<string, number>);
+
+    // Obtener transacciones del mes actual
+    const inicioMes = new Date();
+    inicioMes.setDate(1);
+    inicioMes.setHours(0, 0, 0, 0);
+
+    const transaccionesMes = data.filter(tx => new Date(tx.fecha) >= inicioMes);
+    
+    const ingresosMes = transaccionesMes
+      .filter(tx => tx.tipo === 'ingreso')
+      .reduce((sum, tx) => sum + tx.monto, 0);
+
+    const gastosMes = transaccionesMes
+      .filter(tx => tx.tipo === 'gasto')
+      .reduce((sum, tx) => sum + tx.monto, 0);
+
     return {
       success: true,
       data: {
         user_id: userId,
-        totalIngresos,
-        totalGastos,
-        balance: totalIngresos - totalGastos,
-        transacciones_analizadas: data.length
+        resumen_general: {
+          totalIngresos,
+          totalGastos,
+          balance: totalIngresos - totalGastos,
+          transacciones_analizadas: data.length
+        },
+        mes_actual: {
+          ingresos: ingresosMes,
+          gastos: gastosMes,
+          balance: ingresosMes - gastosMes
+        },
+        gastos_por_categoria: gastosPorCategoria,
+        transacciones_recientes: data.slice(0, 10).map(tx => ({
+          fecha: tx.fecha,
+          tipo: tx.tipo,
+          monto: tx.monto,
+          categoria: tx.categoria,
+          descripcion: tx.descripcion
+        }))
       }
     };
   } catch (error) {
@@ -611,16 +650,53 @@ export async function getPersonalFinancialSummary(userId: number) {
 async function generatePersonalReport(userId: number, reportType: string, period: string) {
   const summary = await getPersonalFinancialSummary(userId);
   
-  return {
+  if (!summary.success || !summary.data) {
+    return summary;
+  }
+
+  const data = summary.data;
+  const baseReport = {
     success: true,
-    message: 'Reporte personal generado',
+    message: 'Reporte personal generado exitosamente',
     data: {
       tipo: 'Personal',
-      user_id: userId,
       periodo: period,
-      ...summary.data
+      fecha_generacion: new Date().toISOString(),
+      ...data,
+      recomendaciones: [] as string[]
     }
   };
+
+  if (reportType === 'recommendations') {
+    const recommendations = [];
+    
+    // Analizar balance
+    if (data.mes_actual && data.mes_actual.balance < 0) {
+      recommendations.push('⚠️ Tu balance mensual es negativo. Considera reducir gastos o aumentar ingresos.');
+    } else if (data.mes_actual && data.mes_actual.balance > data.mes_actual.ingresos * 0.2) {
+      recommendations.push('✅ Excelente! Estás ahorrando más del 20% de tus ingresos.');
+    }
+
+    // Analizar categorías de gastos
+    if (data.gastos_por_categoria) {
+      const topGastos = Object.entries(data.gastos_por_categoria)
+        .sort(([,a], [,b]) => (b as number) - (a as number))
+        .slice(0, 3);
+
+      if (topGastos.length > 0) {
+        recommendations.push(`📊 Tu mayor gasto es en ${topGastos[0][0]}: $${(topGastos[0][1] as number).toLocaleString()}`);
+      }
+    }
+
+    // Sugerencias generales
+    if (data.resumen_general && data.resumen_general.balance > 0) {
+      recommendations.push('💰 Considera invertir parte de tu balance positivo para generar rendimientos.');
+    }
+
+    baseReport.data.recomendaciones = recommendations;
+  }
+
+  return baseReport;
 }
 
 export async function getCompanyFinancialContext(companyId: string) {
