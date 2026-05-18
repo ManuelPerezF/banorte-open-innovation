@@ -21,6 +21,19 @@
 - **Tiempo Real**: Actualizaciones automáticas con Supabase
 - **Responsive**: Diseño optimizado para móviles y escritorio
 
+## Capturas de pantalla
+
+### Landing — Conoce a Proa
+
+![Landing de Proa by Banorte: hero con titular, descripción y CTAs Descubre Proa e Inicia Sesión sobre fondo oscuro con acentos en rojo Banorte](assets/landing.png)
+
+### Inicio de sesión
+
+![Pantalla de inicio de sesión Banorte: formulario con número de cliente, contraseña, selección Personal/Empresa y botón Verificar; cita motivacional en panel derecho](assets/login.png)
+
+### Dashboard personal
+
+![Dashboard Proa by Banorte: KPIs de ingresos, gastos y balance neto, y gráfica diaria de ingresos vs gastos](assets/dashboard.png)
 
 ### Instalación
 
@@ -88,6 +101,7 @@ graph TB
 
 ```
 banorte-open-innovation/
+├── assets/                  # Capturas y recursos estáticos para documentación
 ├── app/                     # Páginas Next.js App Router
 │   ├── api/                # API Routes
 │   ├── dashboard/          # Dashboard principal
